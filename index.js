@@ -1,41 +1,76 @@
-<<<<<<< HEAD
-const express = require('express');
+const express = require('express'),
+  morgan = require('morgan'),
+  fs = require('fs'), // import built in node modules fs and path 
+  path = require('path');
+
+  // Top 10 Movies
+let topMovies = [
+  {
+    title: 'The Evil Dead',
+    director: 'Sam Raimi'
+  },
+  {
+    title: 'The Thing',
+    director: 'John Carpenter'
+  },
+  {
+    title: 'Interveiw with the Vampire',
+    director: 'Neil Jordan'
+    },
+   {
+    title: 'Predator',
+    director: 'John McTiernan'
+    },
+    {
+    title: 'Evil Dead 2',
+    author: 'Sam Raimi'
+    },
+     {
+    title: 'It',
+    author: 'Andrés Muschietti'
+    },
+       {
+    title: 'Hereditary',
+    author: 'Ari Aster'
+    },
+    {
+    title: 'Childs Play',
+    author: 'Tom Holland'
+    },
+    {
+    title: 'Alien',
+    author: 'Ridley Scott'
+    },
+    {
+    title: 'Teenage Mutant Ninja Turtles',
+    author: 'Steve Barron'
+    }    
+];
+
 const app = express();
-=======
-const http = require('http'),
-  fs = require('fs'),
-  url = require('url');
+// create a write stream (in append mode)
+// a ‘log.txt’ file is created in root directory
+const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {flags: 'a'})
 
-http.createServer((request, response) => {
-  let addr = request.url,
-    q = url.parse(addr, true),
-    filePath = '';
+// setup the logger
+app.use(morgan('combined', {stream: accessLogStream}));
 
-  fs.appendFile('log.txt', 'URL: ' + addr + '\nTimestamp: ' + new Date() + '\n\n', (err) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log('Added to log.');
-    }
-  });
+app.use('/documentation.html', express.static('public'));
 
-  if (q.pathname.includes('documentation')) {
-    filePath = (__dirname + '/documentation.html');
-  } else {
-    filePath = 'index.html';
-  }
+app.get('/', (req, res) => {
+  res.send('Welcome to myFlix!');
+});
 
-  fs.readFile(filePath, (err, data) => {
-    if (err) {
-      throw err;
-    }
+app.get('/secreturl', (req, res) => {
+  res.send('This is a secret url with super top-secret content.');
+});
 
-    response.writeHead(200, { 'Content-Type': 'text/html' });
-    response.write(data);
-    response.end();
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
 
-  });
-
-}).listen(8080);
-console.log('My test server is running on Port 8080.');
->>>>>>> 709d27425e16bbe808e4a8175880785ac572c0b6
+app.listen(8080, () => {
+  console.log('Your app is listening on port 8080.');
+});
+  
