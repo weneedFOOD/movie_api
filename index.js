@@ -60,48 +60,20 @@ app.use((err, req, res, next) => {
   res.status(500).send('Something broke!');
 });
 
-// Welcome Page Text
+// GET requests
 app.get('/', (req, res) => {
   res.send('Welcome to myFlix!');
 });
 
-// Get movies
-app.get(
-  "/movies",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    movies
-      .find()
-      .then((movie) => res.status(200).json(movie))
-      .catch((err) => {
-        console.err(err);
-        res.status(500).send(`Error: ${err}`);
-      });
-  }
-);
+app.get('/documentation', (req, res) => {                  
+  res.sendFile('public/documentation.html', { root: __dirname });
+});
 
-// Get director by name
-app.get(
-  "/movies/director/:name",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    const { name } = req.params;
-    movies
-      .findOne({ "director.name": name })
-      .then((movie) => {
-        if (movie) {
-          res.status(201).json(movie.director);
-        } else {
-          res.status(400).send(`Director ${name} not found`);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        res.status(500).send(`Err: ${err}`);
-      });
-  }
-);
+app.get('/movies',(req, res) => {
+    res.json(topMovies);
+});    
 
+//listen for requests
 app.listen(8080, () => {
   console.log('Your app is listening on port 8080.');
 });
