@@ -133,7 +133,7 @@ let movies = [
   },
   {
     "Title": 'Childs Play',
-    "Description": "A single mother gives her son a much sought-after doll for his birthday, only to discover that it is possessed by the soul of a serial killer. A single mother gives her son a much sought-after doll for his birthday, only to discover that it is possessed by the soul of a serial killer",
+    "Description": "A single mother gives her son a much sought-after doll for his birthday, only to discover that it is possessed by the soul of a serial killer.",
     "Genre": {
       "Name": "Horror",
       "Description": "A genre of literature, film, and television that is meant to scare, startle, shock, and even repulse audiances."
@@ -289,7 +289,7 @@ app.get('/movies/:title', (req, res) => {
 })
 
 // READ
-app.get('/movies/genre/:genreName', (req, res) => {
+app.get('/genre/:genreName', (req, res) => {
   const { genreName } = req.params;
   const genre = movies.find( movie => movie.Genre.Name === genreName ).Genre;
 
@@ -301,7 +301,7 @@ app.get('/movies/genre/:genreName', (req, res) => {
 })
 
 // READ
-app.get('/movies/directors/:directorName', (req, res) => {
+app.get('/directors/:directorName', (req, res) => {
   const { directorName } = req.params;
   const director = movies.find( movie => movie.Director.Name === directorName ).Director;
 
