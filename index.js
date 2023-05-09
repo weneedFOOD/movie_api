@@ -1,4 +1,8 @@
 const express = require('express'),
+  mongoose = require("mongoose"),
+  Models = require("./models.js"),
+  Movies = Models.Movie,
+  Users = Models.User,
   morgan = require('morgan'),
   fs = require('fs'), // import built in node modules fs and path 
   path = require('path'),
@@ -177,6 +181,11 @@ let movies = [
     "Featured": false
   }    
 ];
+
+mongoose.connect('mongodb://localhost:27017/filmDB', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
 
 const app = express();
 // create a write stream (in append mode)
