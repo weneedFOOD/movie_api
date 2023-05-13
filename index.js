@@ -188,7 +188,6 @@ mongoose.connect('mongodb://localhost:27017/filmDB', {
   useUnifiedTopology: true
 });
 
-// create a write stream (in append mode)
 // a ‘log.txt’ file is created in root directory
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {flags: 'a'})
 
