@@ -1,4 +1,6 @@
-const express = require('express'),
+const bodyParser = require('body-parser'),
+  express = require('express'),
+  app = express(),
   mongoose = require("mongoose"),
   Models = require("./models.js"),
   Movies = Models.Movie,
@@ -6,7 +8,6 @@ const express = require('express'),
   morgan = require('morgan'),
   fs = require('fs'), // import built in node modules fs and path 
   path = require('path'),
-  bodyParser = require('body-parser'),
   uuid = require('uuid');
 
 
@@ -187,15 +188,15 @@ mongoose.connect('mongodb://localhost:27017/filmDB', {
   useUnifiedTopology: true
 });
 
-const app = express();
 // create a write stream (in append mode)
 // a ‘log.txt’ file is created in root directory
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {flags: 'a'})
 
 // setup the logger
-app.use(morgan('combined', {stream: accessLogStream}));
-app.use(express.static('public'));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static('public'));
+app.use(morgan('combined', {stream: accessLogStream}));
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something broke!');
@@ -268,7 +269,7 @@ app.put('/users/:Username', (req, res) => {
      },
      { new: true }, // This line makes sure that the updated document is returned
      (err, updatedUser) => {
-      if(err) {
+      if (err) {
         console.error(err);
         res.status(500).send('Error: ' + err);
       } else {
@@ -278,7 +279,7 @@ app.put('/users/:Username', (req, res) => {
 });
 
 // Add a movie to a user's list of favorites
-app.post('/users/:Username/Movies/:MovieID', (req, res) => {
+app.post('/users/:Username/movies/:MovieID', (req, res) => {
   Users.findOneAndUpdate({ Username: req.params.Username }, {
      $push: { FavoriteMovies: req.params.MovieID }
    },
@@ -295,7 +296,7 @@ app.post('/users/:Username/Movies/:MovieID', (req, res) => {
 
 
 // Delete a movie from user's list of favorites
-app.delete('/users/:Username/Movies/:MovieID', (req, res) => {
+app.delete('/users/:Username/movies/:MovieID', (req, res) => {
   Users.findOneAndUpdate({ Username: req.params.Username }, {
     $pull: { FavoriteMovies: req.params.MovieID }
   },
