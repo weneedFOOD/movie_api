@@ -267,14 +267,14 @@ app.put('/users/:Username', (req, res) => {
       }
      },
      { new: true }, // This line makes sure that the updated document is returned
-     (err, updatedUser) => {
-      if (err) {
-        console.error(err);
-        res.status(500).send('Error: ' + err);
-      } else {
-        res.json(updatedUser);
-      }
-  });
+     )
+     .then(updatedUser => {
+      res.json(updatedUser);
+     })
+     .catch(err => {
+      console.error(err);
+      res.status(500).send('Error: ' + err);
+    });
 });
 
 // Add a movie to a user's list of favorites
@@ -283,14 +283,14 @@ app.post('/users/:Username/movies/:MovieID', (req, res) => {
      $push: { FavoriteMovies: req.params.MovieID }
    },
    { new: true }, // This line makes sure that the updated document is returned
-   (err, updatedUser) => {
-     if (err) {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-     } else {
-      res.json(updatedUser);
-     }
-  });
+   )
+   .then(updatedUser => {
+    res.json(updatedUser);
+   })
+   .catch(err => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+   });
 });
 
 
@@ -300,14 +300,14 @@ app.delete('/users/:Username/movies/:MovieID', (req, res) => {
     $pull: { FavoriteMovies: req.params.MovieID }
   },
   { new: true }, // This line makes sure that the updated document is returned
-  (err, updatedUser) => {
-    if (err) {
-      console.error(err);
-      res.status(500).send('Error: ' + err);
-    } else {
-      req.json(updatedUser);
-    }
-  });
+  )
+  .then(updatedUser => {
+    res.json(updatedUser);
+   })
+   .catch(err => {
+    console.error(err);
+    res.status(500).send('Error: ' + err);
+   });
 });
 
 // Delete a user by username
