@@ -22,6 +22,11 @@ const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {f
 // setup the logger
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+let auth = require('./auth')(app);
+const passport = require('passport');
+require('./passport');
+
 app.use(express.static('public'));
 app.use(morgan('combined', {stream: accessLogStream}));
 app.use((err, req, res, next) => {
@@ -155,7 +160,7 @@ app.delete('/users/:Username', (req, res) => {
 });
 
 // Get all movies
-app.get('/movies',(req, res) => {
+app.get('/movies', passport.authenticate('jwt', {session: false}), (req, res) => {
   Movies.find()
     .then((movies) => {
       res.status(201).json(movies);
