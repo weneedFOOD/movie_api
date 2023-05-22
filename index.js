@@ -25,7 +25,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const cors = require('cors');
 
-app.use(cors());
+let allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if(!origin) return callback(null, true);
+    if(allowedOrigins.indexOf(origin) === -1){ // If a specific origin isn’t found on the list of allowed origins
+      let message = 'The CORS policy for this application doesn`t allow access from origin ' + origin;
+      return callback(new Error(message ), false);
+    }
+    return callback(null, true);
+  }
+}));
 
 let auth = require('./auth')(app);
 const passport = require('passport');
@@ -40,6 +51,8 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something broke!');
 });
+
+
 
 // GET requests
 app.get('/', (req, res) => {
@@ -63,10 +76,10 @@ app.post('/users',
    // Validation logic here for request
    // you can eighter use a chain of methods like .not() .isEmpty()
    // which means "opposite of isEmpty" in plain english " is not empty"
-   // or use .isLength({min: 5}) which means
-   // minimum value of 5 characters are allowed
+   // or use .isLength({min: 3}) which means
+   // minimum value of 3 characters are allowed
    [
-    check('Username', 'Username is required').isLength({min: 5}),
+    check('Username', 'Username is required').isLength({min: 3}),
     check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
     check('Password', 'Password is required').not().isEmpty(),
     check('Email', 'Email does not appear to be valid').isEmail()
