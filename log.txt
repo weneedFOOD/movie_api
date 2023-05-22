@@ -408,3 +408,6 @@ Timestamp: Thu Feb 16 2023 14:17:37 GMT-0600 (Central Standard Time)
 ::1 - - [20/May/2023:06:11:30 +0000] "GET /login?Username=Nate&Password=1010 HTTP/1.1" 404 144 "-" "PostmanRuntime/7.32.2"
 ::1 - - [20/May/2023:06:11:51 +0000] "PUT /login?Username=Nate&Password=1010 HTTP/1.1" 404 144 "-" "PostmanRuntime/7.32.2"
 ::1 - - [20/May/2023:06:12:19 +0000] "GET /users HTTP/1.1" 401 - "-" "PostmanRuntime/7.32.2"
+127.0.0.1 - - [22/May/2023:01:27:53 +0000] "POST /users/Username=Nate&Password=1010 HTTP/1.1" 404 177 "-" "PostmanRuntime/7.32.2"
+127.0.0.1 - - [22/May/2023:01:28:00 +0000] "POST /users?Username=Nate&Password=1010 HTTP/1.1" 422 207 "-" "PostmanRuntime/7.32.2"
+127.0.0.1 - - [22/May/2023:01:28:59 +0000] "POST /users?Username=Nate&Password=1010&Email=bignate10@gmail.com HTTP/1.1" 422 207 "-" "PostmanRuntime/7.32.2"
