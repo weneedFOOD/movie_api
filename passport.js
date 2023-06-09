@@ -12,23 +12,36 @@ passport.use(new LocalStrategy({
    passwordField: 'Password'
 }, (username, password, callback) => {
     console.log(username + ' ' + password);
-    Users.findOne({ Username: username }, (error, user) => {
-      if (error) {
-        console.log(error);
-        return callback(error);
-      }
+    Users.findOne({ Username: username })
+    .then((user) => {
       if (!user) {
         console.log('incorrect username');
-        return callback(null, false, {message: 'Incorrrect username.'});
+        return callback(null, false, {
+          message: 'Incorrect username or password.'
+        });
       }
-      if (!user.validatePassword(password)) {
+
+      if (!user) {
         console.log('incorrect password');
-        return callback(null, false, {message: 'Incorrect password.'});
+        return callback(null, false, { message: 'Incorrect password.' });
       }
+
+      if (!user.validatePassword(password)) {
+        console.log('Incorrect password');
+        return callback(null, false, { message: 'Incorrect password.' });
+      }
+
       console.log('finished');
-      return callback(null, user);  
-    });  
-}));
+      return callback(null, user);
+    })
+    .catch((error) => {
+      console.error(error);
+      return callback(error);
+    });
+  }
+)
+);
+
 
 
 passport.use(new JWTStrategy({
