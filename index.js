@@ -11,7 +11,7 @@ const bodyParser = require('body-parser'),
   uuid = require('uuid');
 
 
-mongoose.connect('mongodb://localhost:27017/filmDB', {
+mongoose.connect( process.env.CONNECTION_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
